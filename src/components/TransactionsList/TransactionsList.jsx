@@ -1,0 +1,148 @@
+import React, { useState, useEffect, memo, useMemo, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { openAddModal } from "../../redux/Modals/slice";
+import TransactionItem from "../TransactionsItem/TransactionsItem";
+import styles from "./TransactionsList.module.css";
+import Loader from "../Loader/Loader";
+import { FaSortUp, FaSortDown } from "react-icons/fa";
+import {
+  selectTransactions,
+  selectTransLoading,
+  selectTransError,
+} from "../../redux/transactions/selectors";
+import { selectCategories } from "../../redux/Statistics/selectors";
+import { getTransactionsCategories } from "../../redux/Statistics/operations";
+import { getFormattedTransactions } from "../../helpers/transactionsFormatter";
+import useMedia from "../../hooks/useMedia.jsx";
+
+const TransactionList = () => {
+  const transactions = useSelector(selectTransactions);
+  const isLoading = useSelector(selectTransLoading);
+  const isError = useSelector(selectTransError);
+  const categories = useSelector(selectCategories);
+  const { isMobile } = useMedia();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!categories || categories.length === 0) {
+      dispatch(getTransactionsCategories());
+    }
+  }, []);
+
+  const [sortConfig, setSortConfig] = useState({
+    key: "date",
+    direction: "desc",
+  });
+
+  const requestSort = useCallback((key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "asc"
+          ? "desc"
+          : "asc",
+    }));
+  }, []);
+
+  const getSortIcon = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return sortConfig.direction === "asc" ? (
+          <FaSortUp className={styles.sortIcon} />
+        ) : (
+          <FaSortDown className={styles.sortIcon} />
+        );
+      }
+      return null;
+    },
+    [sortConfig.key, sortConfig.direction]
+  );
+
+  // Memoize formatted transactions
+  const formattedTransactions = useMemo(
+    () => getFormattedTransactions(transactions, categories, sortConfig),
+    [transactions, categories, sortConfig]
+  );
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (isError) {
+    return <p className={styles.text}>Oops, something went wrong...</p>;
+  }
+
+  if (!transactions || transactions.length === 0) {
+    return (
+      <div className={styles.emptyTransactionsContainer}>
+        <p className={styles.noTransactions}>No transactions available yet.</p>
+        <p className={styles.addFirstTransaction}>
+          Let's add your first transaction:
+        </p>
+        <button
+          className={styles.addTransactionButton}
+          onClick={() => dispatch(openAddModal())}
+        >
+          ADD TRANSACTION
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.tableContainer}>
+      {!isMobile && (
+        <div className={styles.tableHeader}>
+          <div
+            className={styles.headerCell}
+            onClick={() => requestSort("date")}
+            role="button"
+            tabIndex={0}
+          >
+            Date {getSortIcon("date")}
+          </div>
+          <div
+            className={styles.headerCell}
+            onClick={() => requestSort("type")}
+            role="button"
+            tabIndex={0}
+          >
+            Type {getSortIcon("type")}
+          </div>
+          <div
+            className={styles.headerCell}
+            onClick={() => requestSort("category")}
+            role="button"
+            tabIndex={0}
+          >
+            Category {getSortIcon("category")}
+          </div>
+          <div
+            className={styles.headerCell}
+            onClick={() => requestSort("comment")}
+            role="button"
+            tabIndex={0}
+          >
+            Comment {getSortIcon("comment")}
+          </div>
+          <div
+            className={styles.headerCell}
+            onClick={() => requestSort("sum")}
+            role="button"
+            tabIndex={0}
+          >
+            Sum {getSortIcon("sum")}
+          </div>
+          <div className={styles.headerCell}></div>
+        </div>
+      )}
+      <ul className={styles.transactionList}>
+        {formattedTransactions.map((transaction) => (
+          <TransactionItem key={transaction.id} transaction={transaction} />
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default memo(TransactionList);

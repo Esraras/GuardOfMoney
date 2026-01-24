@@ -1,0 +1,60 @@
+import { useState, memo, useCallback } from "react";
+import Header from "../../components/Header/Header";
+import ButtonAddTransactions from "../../components/ButtonAddTransactions/ButtonAddTransactions";
+import css from "./DashBoardPage.module.css";
+import Navigation from "../../components/Navigation/Navigation";
+import HomeTab from "../../components/Tabs/HomeTab/HomeTab";
+import StaticsTab from "../../components/Tabs/StatisticsTab/StatisticsTab";
+import Balance from "../../components/Balance/Balance";
+import ModalAddTransaction from "../../components/ModalAddTransaction/ModalAddTransaction";
+import ModalEditTransaction from "../../components/ModalEditTransaction/ModalEditTransaction";
+import CurrencyTab from "../../currency/Currency.jsx";
+
+const DashboardPage = () => {
+  const [activeTab, setActiveTab] = useState("home");
+
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
+
+  const renderContent = useCallback(() => {
+    switch (activeTab) {
+      case "home":
+        return <HomeTab />;
+      case "statistics":
+        return <StaticsTab />;
+      case "currency":
+        return <CurrencyTab />;
+      default:
+        return <HomeTab />;
+    }
+  }, [activeTab]);
+
+  return (
+    <>
+      <Header />
+      <div className={css.dashboardContainer}>
+        <div className={css.sideBar}>
+          <div className={css.navBalance}>
+            <Navigation activeTab={activeTab} onChange={handleTabChange} />
+            <div className={css.balance}>
+              <Balance />
+            </div>
+          </div>
+          <div className={css.currencyTab}>
+            <CurrencyTab />
+          </div>
+        </div>
+        <div className={css.divider}></div>
+        <div className={css.mainContent}>
+          {renderContent()}
+          <ButtonAddTransactions />
+        </div>
+        <ModalAddTransaction />
+        <ModalEditTransaction />
+      </div>
+    </>
+  );
+};
+
+export default memo(DashboardPage);

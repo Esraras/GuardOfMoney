@@ -1,0 +1,44 @@
+import { configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+import { authReducer } from "./auth/slice";
+import { modalsReducer } from "./Modals/slice";
+import { transactionsReducer } from "./transactions/slice.js";
+import { statisticsReducer } from "./Statistics/slice";
+import currencyReducer from "./currency/slice";
+
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["token"],
+};
+
+export const store = configureStore({
+  reducer: {
+    auth: persistReducer(authPersistConfig, authReducer),
+    modals: modalsReducer,
+    transactions: transactionsReducer,
+    statistics: statisticsReducer,
+    currency: currencyReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  devTools: import.meta.env.DEV, // Enable devtools only in development
+});
+
+export const persistor = persistStore(store);
+

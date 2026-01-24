@@ -1,0 +1,76 @@
+.dashboardContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sideBar {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    justify-content: center;
+}
+.balance {
+    display: none;
+}
+.currencyTab {
+    display: none;
+}
+
+.divider {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .dashboardContainer {
+        padding: 20px;
+    }
+
+    .sideBar {
+        flex-direction: row;
+        gap: 20px 0px;
+        justify-content: normal;
+    }
+
+    .balance {
+        display: flex;
+        justify-content: center;
+    }
+
+    .currencyTab {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        max-width: 100%;
+        margin-left: 20px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .dashboardContainer {
+        flex-direction: row;
+        padding: 0;
+    }
+
+    .sideBar {
+        flex-direction: column;
+        padding: 20px 0;
+    }
+
+    .divider {
+        display: flex;
+        width: 2px;
+        background: rgba(255, 255, 255, 0.25);
+        height: 100vh;
+    }
+
+    .balance {
+        margin-top: 28px;
+    }
+
+    .currencyTab {
+        margin-top: 32px;
+        margin-left: 0;
+    }
+}

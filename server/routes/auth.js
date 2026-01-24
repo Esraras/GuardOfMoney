@@ -1,0 +1,129 @@
+import express from "express";
+import bcrypt from "bcrypt";
+import { PrismaClient } from '@prisma/client';
+import { generateToken } from "../middleware/auth.js";
+
+const router = express.Router();
+const prisma = new PrismaClient();
+
+// Register
+router.post("/sign-up", async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Check if user exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ error: "Email already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name: name || null,
+      },
+    });
+
+    const token = generateToken(user.id);
+
+    res.status(201).json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Sign-up error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Login
+router.post("/sign-in", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Missing email or password" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const token = generateToken(user.id);
+
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Sign-in error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get current user
+router.get("/current", async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+      },
+    });
+  } catch (error) {
+    console.error("Get current user error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Logout
+router.delete("/sign-out", async (req, res) => {
+  try {
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+export default router;

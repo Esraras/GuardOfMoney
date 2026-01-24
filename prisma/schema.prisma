@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Role {
+  USER
+  ADMIN
+
+  @@map("role_enum")
+}
+
+enum AccountType {
+  CASH
+  BANK
+  CREDIT_CARD
+  SAVINGS
+
+  @@map("account_type_enum")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+
+  @@map("transaction_type_enum")
+}
+
+// Models
+model User {
+  id        String    @id @default(uuid()) @db.Uuid
+  email     String    @unique
+  password  String
+  name      String?
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  accounts    Account[]
+  categories  Category[]
+  transactions Transaction[]
+  budgets     Budget[]
+
+  @@map("users")
+}
+
+model Account {
+  id        String      @id @default(uuid()) @db.Uuid
+  name      String
+  type      AccountType
+  balance   Decimal     @default(0)
+  userId    String      @db.Uuid
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+
+  transactions Transaction[]
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Category {
+  id        String      @id @default(uuid()) @db.Uuid
+  name      String
+  color     String
+  icon      String?
+  userId    String      @db.Uuid
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@index([userId])
+  @@map("categories")
+}
+
+model Transaction {
+  id          String          @id @default(uuid()) @db.Uuid
+  amount      Decimal
+  description String?
+  type        TransactionType
+  date        DateTime
+  userId      String          @db.Uuid
+  accountId   String          @db.Uuid
+  categoryId  String          @db.Uuid
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account     Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
+  createdAt   DateTime        @default(now())
+
+  @@index([userId])
+  @@index([accountId])
+  @@index([date])
+  @@map("transactions")
+}
+
+model Budget {
+  id         String  @id @default(uuid()) @db.Uuid
+  amount     Decimal
+  month      Int
+  year       Int
+  userId     String  @db.Uuid
+  categoryId String  @db.Uuid
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("budgets")
+}
+
