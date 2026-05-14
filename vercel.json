@@ -2,12 +2,12 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    },
-    {
       "source": "/api/(.*)",
       "destination": "/server/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
