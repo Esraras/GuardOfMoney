@@ -6,8 +6,8 @@ export default defineConfig({
   base: "/",
   plugins: [react()],
   build: {
-    sourcemap: false, // Disable in production for security and smaller bundle
-    minify: "terser",
+    sourcemap: false,
+    minify: "esbuild", 
     target: "ES2020",
     rollupOptions: {
       output: {
