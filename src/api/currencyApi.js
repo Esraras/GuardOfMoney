@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const ROOT = import.meta.env.VITE_API_URL || "https://guard-of-money.vercel.app";
-const API_BASE_URL = `${ROOT.replace(/\/?$/, "")}/api`;
+const API_BASE_URL = `${ROOT}`;
 const CACHE_KEY = "currencyRatesCache";
-const CACHE_DURATION = 3600000; // 1 hour
+const CACHE_DURATION = 3600000;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
