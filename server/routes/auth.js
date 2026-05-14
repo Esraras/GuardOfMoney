@@ -1,10 +1,15 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import { PrismaClient } from '@prisma/client';
-import { generateToken } from "../middleware/auth.js";
+import { generateToken, verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+const toNumber = (value) =>
+  value && typeof value.toNumber === "function"
+    ? value.toNumber()
+    : Number(value || 0);
 
 // Register
 router.post("/sign-up", async (req, res) => {
@@ -94,15 +99,21 @@ router.post("/sign-in", async (req, res) => {
 });
 
 // Get current user
-router.get("/current", async (req, res) => {
+router.get("/current", verifyToken, async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
+      include: { accounts: true },
     });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    const balance = user.accounts.reduce(
+      (sum, account) => sum + toNumber(account.balance),
+      0
+    );
 
     res.json({
       user: {
@@ -110,6 +121,7 @@ router.get("/current", async (req, res) => {
         email: user.email,
         name: user.name,
       },
+      balance,
     });
   } catch (error) {
     console.error("Get current user error:", error);

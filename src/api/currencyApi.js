@@ -73,7 +73,11 @@ export const getCurrencyRates = async () => {
         timeout: 5000,
       });
 
-      const finalRates = response.data
+      const rawRates = Array.isArray(response.data)
+        ? response.data
+        : response.data?.rates || response.data?.data || [];
+
+      const finalRates = (Array.isArray(rawRates) ? rawRates : [])
         .filter(
           (rate) =>
             (rate.currencyCodeA === 840 || rate.currencyCodeA === 978) &&

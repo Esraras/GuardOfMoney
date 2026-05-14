@@ -53,10 +53,16 @@
   gap: 16px;
 }
 
-.category div:first-of-type {
+.category div:first-of-type,
+.categoryIcon {
   width: 24px;
   height: 24px;
-  border-radius: 2px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
 }
 
 .total {

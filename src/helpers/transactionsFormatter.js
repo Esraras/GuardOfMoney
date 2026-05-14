@@ -14,52 +14,56 @@ export function sortTransactions(transactions, sortConfig) {
   return [...transactions].sort((a, b) => {
     if (sortConfig.key === "date") {
       return sortConfig.direction === "asc"
-        ? a.date.localeCompare(b.date)
-        : b.date.localeCompare(a.date);
+        ? String(a.date || "").localeCompare(String(b.date || ""))
+        : String(b.date || "").localeCompare(String(a.date || ""));
     } else if (sortConfig.key === "type") {
       return sortConfig.direction === "asc"
-        ? a.type.localeCompare(b.type)
-        : b.type.localeCompare(a.type);
+        ? String(a.type || "").localeCompare(String(b.type || ""))
+        : String(b.type || "").localeCompare(String(a.type || ""));
     } else if (sortConfig.key === "category") {
       return sortConfig.direction === "asc"
-        ? a.category.localeCompare(b.category)
-        : b.category.localeCompare(a.category);
+        ? String(a.category || "").localeCompare(String(b.category || ""))
+        : String(b.category || "").localeCompare(String(a.category || ""));
     } else if (sortConfig.key === "comment") {
       const aComment = a.comment || "";
       const bComment = b.comment || "";
       return sortConfig.direction === "asc"
-        ? aComment.localeCompare(bComment)
-        : bComment.localeCompare(aComment);
+        ? String(aComment).localeCompare(String(bComment))
+        : String(bComment).localeCompare(String(aComment));
     } else if (sortConfig.key === "sum") {
       return sortConfig.direction === "asc" ? a.sum - b.sum : b.sum - a.sum;
     }
 
     return sortConfig.direction === "asc"
-      ? a.date.localeCompare(b.date)
-      : b.date.localeCompare(a.date);
+      ? String(a.date || "").localeCompare(String(b.date || ""))
+      : String(b.date || "").localeCompare(String(a.date || ""));
   });
 }
 
 function getFormattedTransaction(transaction, categories) {
   const {
-    transactionDate: date,
+    transactionDate,
+    date,
     amount: sum,
     categoryId,
     type,
     comment,
+    description,
     id,
   } = transaction;
 
+  const rawDate = transactionDate || date;
+  const transactionDateValue = rawDate ? new Date(rawDate) : new Date();
   const category =
     type === "INCOME" ? "Income" : getCategoryName(categoryId, categories);
 
   const newTransaction = {
     id,
-    date,
-    type,
+    date: transactionDateValue ? new Date(transactionDateValue) : new Date(),
+    type: type || "",
     category,
-    comment,
-    sum: Math.abs(sum),
+    comment: comment || description || "",
+    sum: Math.abs(sum || 0),
   };
   return newTransaction;
 }

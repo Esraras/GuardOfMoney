@@ -30,7 +30,7 @@ const StatisticsChart = () => {
       : ["There is no data for selected date"];
 
     const chartValues = filteredCategories.length
-      ? filteredCategories.map((item) => (item.total ? item.total * -1 : 0))
+      ? filteredCategories.map((item) => Math.abs(Number(item.total || 0)))
       : [100];
 
     const chartBackgroundColors = filteredCategories.length

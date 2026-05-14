@@ -27,7 +27,7 @@ const TransactionList = () => {
     if (!categories || categories.length === 0) {
       dispatch(getTransactionsCategories());
     }
-  }, []);
+  }, [categories, dispatch]);
 
   const [sortConfig, setSortConfig] = useState({
     key: "date",

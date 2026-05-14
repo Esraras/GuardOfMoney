@@ -6,7 +6,6 @@ import {
   selectStatLoading,
 } from "../../redux/Statistics/selectors";
 import { selectCategories } from "../../redux/Statistics/selectors";
-import { getTrasactionCategoryColor } from "../../constants/TransactionConstants";
 import LoadingSpinner from "../common/LoadingSpinner/Loader";
 
 const StatisticsTable = () => {
@@ -35,12 +34,10 @@ const StatisticsTable = () => {
             return (
               <div key={displayName + idx} className={styles.categoryRow}>
                 <div className={styles.category}>
-                  <div
-                    style={{
-                      backgroundColor: getTrasactionCategoryColor(displayName),
-                    }}
-                  ></div>
-                  <span>{displayName}</span>
+                  <div className={styles.categoryIcon}>
+                  {item.icon || displayName?.charAt(0) || "•"}
+                </div>
+                <span>{displayName}</span>
                 </div>
                 <span className={styles.sum}>{(Math.abs(item.total || 0)).toFixed(2)}</span>
               </div>

@@ -12,7 +12,7 @@ const LoginPage = () => {
         dispatch(loginThunk(values))
             .unwrap()
             .then((data) => {
-                toast.success(`Welcome ${data.user.username}!`);
+                toast.success(`Welcome ${data.user.name || data.user.email}!`);
             })
             .catch(() => {
                 toast.error("Invalid credentials");

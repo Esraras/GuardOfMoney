@@ -79,11 +79,11 @@ export const refreshThunk = createAsyncThunk(
 );
 
 export const getBalanceThunk = createAsyncThunk(
-  "getBalannce",
+  "getBalance",
   async (_, thunkApi) => {
     try {
       const { data } = await userTransactionsApi.get("/auth/current");
-      return data.user;
+      return data.balance;
     } catch (error) {
       return thunkApi.rejectWithValue(
         error.response?.data?.message || error.message

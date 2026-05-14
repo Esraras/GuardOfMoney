@@ -21,7 +21,7 @@ const RegistrationPage = () => {
             .unwrap()
             .then((data) => {
                 toast.success(
-                    `Registration is success ${data.user.username}, welcome!`
+                    `Registration is success ${data.user.name || data.user.email}, welcome!`
                 );
             })
             .catch((err) => {

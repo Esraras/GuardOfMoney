@@ -6,12 +6,34 @@ const prisma = new PrismaClient();
 // Get all categories for user
 router.get("/", async (req, res) => {
   try {
+    const { month, year } = req.query;
+
+    const include = {};
+    if (month !== undefined && year !== undefined) {
+      include.budgets = {
+        where: {
+          month: Number(month),
+          year: Number(year),
+        },
+      };
+    }
+
     const categories = await prisma.category.findMany({
       where: { userId: req.userId },
+      include,
       orderBy: { name: "asc" },
     });
 
-    res.json(categories);
+    const sortedCategories = categories.sort((a, b) => {
+      const aIsOther = /diğer/i.test(a.name);
+      const bIsOther = /diğer/i.test(b.name);
+
+      if (aIsOther && !bIsOther) return 1;
+      if (!aIsOther && bIsOther) return -1;
+      return a.name.localeCompare(b.name);
+    });
+
+    res.json(sortedCategories);
   } catch (error) {
     console.error("Get categories error:", error);
     res.status(500).json({ error: error.message });

@@ -39,23 +39,23 @@ const slice = createSlice({
         state.isLoggedIn = false;
       })
       .addCase(refreshThunk.fulfilled, (state, { payload }) => {
-        state.user.name = payload.username;
-        state.user.email = payload.email;
-        state.user.balance = payload.balance;
+        state.user.name = payload.user?.name || null;
+        state.user.email = payload.user?.email || null;
+        state.user.balance = payload.balance ?? state.user.balance;
 
         state.isLoggedIn = true;
         state.isRefreshing = false;
         state.isAuthLoading = false;
       })
       .addCase(getBalanceThunk.fulfilled, (state, { payload }) => {
-        state.user.balance = payload;
+        state.user.balance = payload ?? state.user.balance;
       })
       .addMatcher(
         isAnyOf(loginThunk.fulfilled, registerThunk.fulfilled),
         (state, { payload }) => {
-          state.user.name = payload.user.username;
-          state.user.email = payload.user.email;
-          state.user.balance = payload.user.balance;
+          state.user.name = payload.user?.name || null;
+          state.user.email = payload.user?.email || null;
+          state.user.balance = payload.user?.balance ?? state.user.balance;
           state.token = payload.token;
           state.isLoggedIn = true;
           state.isAuthLoading = false;

@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.js";
 import transactionRoutes from "./routes/transactions.js";
 import categoryRoutes from "./routes/categories.js";
 import accountRoutes from "./routes/accounts.js";
+import budgetRoutes from "./routes/budgets.js";
 import { verifyToken } from "./middleware/auth.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/accounts", verifyToken, accountRoutes);
+app.use("/api/budgets", verifyToken, budgetRoutes);
 app.use("/api/transactions", verifyToken, transactionRoutes);
 app.use("/api/categories", verifyToken, categoryRoutes);
 

@@ -3,11 +3,29 @@ import { PrismaClient } from '@prisma/client';
 const router = express.Router();
 const prisma = new PrismaClient();
 
+const toNumber = (value) =>
+  value && typeof value.toNumber === "function"
+    ? value.toNumber()
+    : Number(value || 0);
+
 // Get all transactions for user
 router.get("/", async (req, res) => {
   try {
+    const { month, year } = req.query;
+    const where = { userId: req.userId };
+
+    if (month !== undefined && year !== undefined) {
+      const monthNumber = Number(month);
+      const yearNumber = Number(year);
+      if (!Number.isNaN(monthNumber) && !Number.isNaN(yearNumber)) {
+        const startDate = new Date(yearNumber, monthNumber - 1, 1);
+        const endDate = new Date(yearNumber, monthNumber, 0, 23, 59, 59, 999);
+        where.date = { gte: startDate, lte: endDate };
+      }
+    }
+
     const transactions = await prisma.transaction.findMany({
-      where: { userId: req.userId },
+      where,
       include: { category: true },
       orderBy: { date: "desc" },
     });
@@ -24,7 +42,27 @@ router.post("/", async (req, res) => {
   try {
     const { amount, description, type, date, categoryId, accountId } = req.body;
 
-    if (!amount || !type || !date || !categoryId || !accountId) {
+    let selectedAccountId = accountId;
+    if (!selectedAccountId) {
+      const defaultAccount = await prisma.account.findFirst({
+        where: { userId: req.userId },
+      });
+      if (defaultAccount) {
+        selectedAccountId = defaultAccount.id;
+      } else {
+        const createdAccount = await prisma.account.create({
+          data: {
+            name: "Main Account",
+            type: "BANK",
+            balance: 0,
+            userId: req.userId,
+          },
+        });
+        selectedAccountId = createdAccount.id;
+      }
+    }
+
+    if (!amount || !type || !date || !categoryId) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -39,34 +77,33 @@ router.post("/", async (req, res) => {
 
     // Verify account belongs to user
     const account = await prisma.account.findUnique({
-      where: { id: accountId },
+      where: { id: selectedAccountId },
     });
 
     if (!account || account.userId !== req.userId) {
       return res.status(403).json({ error: "Unauthorized account" });
     }
 
+    const parsedAmount = toNumber(amount);
+
     const transaction = await prisma.transaction.create({
       data: {
-        amount: parseFloat(amount),
+        amount: parsedAmount,
         description: description || null,
         type,
         date: new Date(date),
         categoryId,
-        accountId,
+        accountId: selectedAccountId,
         userId: req.userId,
       },
       include: { category: true, account: true },
     });
 
     // Update account balance
-    const newBalance =
-      type === "INCOME" 
-        ? account.balance + parseFloat(amount)
-        : account.balance - parseFloat(amount);
+    const newBalance = toNumber(account.balance) + parsedAmount;
 
     await prisma.account.update({
-      where: { id: accountId },
+      where: { id: selectedAccountId },
       data: { balance: newBalance },
     });
 
@@ -105,44 +142,29 @@ router.patch("/:id", async (req, res) => {
         return res.status(403).json({ error: "Unauthorized account" });
       }
 
-      // Revert from old account
-      const oldTransactionAmount = transaction.type === "INCOME" 
-        ? oldAccount.balance - transaction.amount
-        : oldAccount.balance + transaction.amount;
-
+      const oldAccountBalance = toNumber(oldAccount.balance) - toNumber(transaction.amount);
       await prisma.account.update({
         where: { id: transaction.accountId },
-        data: { balance: oldTransactionAmount },
+        data: { balance: oldAccountBalance },
       });
 
-      // Add to new account
-      const newAmount = amount || transaction.amount;
-      const newAccountAmount = type === "INCOME" 
-        ? newAccount.balance + newAmount
-        : newAccount.balance - newAmount;
+      const newAmount = amount !== undefined ? toNumber(amount) : toNumber(transaction.amount);
+      const newAccountBalance = toNumber(newAccount.balance) + newAmount;
 
       await prisma.account.update({
         where: { id: accountId },
-        data: { balance: newAccountAmount },
+        data: { balance: newAccountBalance },
       });
-    } else if (amount || type) {
+    } else if (amount !== undefined || type !== undefined) {
       // Update balance in same account
       const account = await prisma.account.findUnique({
         where: { id: transaction.accountId },
       });
 
-      const oldTransactionAmount = transaction.type === "INCOME"
-        ? transaction.amount
-        : -transaction.amount;
-
-      const newAmount = amount || transaction.amount;
-      const newType = type || transaction.type;
-      const newTransactionAmount = newType === "INCOME"
-        ? newAmount
-        : -newAmount;
-
-      const balanceDifference = newTransactionAmount - oldTransactionAmount;
-      const newBalance = account.balance + balanceDifference;
+      const oldTransactionAmount = toNumber(transaction.amount);
+      const newAmount = amount !== undefined ? toNumber(amount) : toNumber(transaction.amount);
+      const balanceDifference = newAmount - oldTransactionAmount;
+      const newBalance = toNumber(account.balance) + balanceDifference;
 
       await prisma.account.update({
         where: { id: transaction.accountId },
@@ -188,11 +210,8 @@ router.delete("/:id", async (req, res) => {
       where: { id: transaction.accountId },
     });
 
-    const transactionAmount = transaction.type === "INCOME"
-      ? transaction.amount
-      : -transaction.amount;
-
-    const newBalance = account.balance - transactionAmount;
+    const transactionAmount = toNumber(transaction.amount);
+    const newBalance = toNumber(account.balance) - transactionAmount;
 
     await prisma.account.update({
       where: { id: transaction.accountId },

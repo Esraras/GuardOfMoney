@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { format } from "date-fns";
+import { enUS } from "date-fns/locale";
 import { selectCategories } from "../../redux/Statistics/selectors";
 import { selectTransactions } from "../../redux/transactions/selectors";
 import { editTransactions } from "../../redux/transactions/operations";
@@ -41,13 +42,13 @@ function EditTransactionForm() {
   }, [foundObject.type]);
 
   const amountDefaultValue = Math.abs(foundObject.amount);
-  const startDateDefaultValue = new Date(foundObject.transactionDate);
-  const commentDefaultValue = foundObject.comment;
+  const startDateDefaultValue = new Date(foundObject.date || foundObject.transactionDate);
+  const commentDefaultValue = foundObject.description || foundObject.comment || "";
 
   const schema = yup.object().shape({
     amount: yup.number().required("Number invalid value"),
-    transactionDate: yup.date().required("Date is required"),
-    comment: yup.string().required("Comment is required"),
+    date: yup.date().required("Date is required"),
+    description: yup.string().required("Comment is required"),
   });
 
   const {
@@ -59,8 +60,8 @@ function EditTransactionForm() {
     resolver: yupResolver(schema),
     defaultValues: {
       amount: amountDefaultValue,
-      transactionDate: startDateDefaultValue,
-      comment: commentDefaultValue,
+      date: startDateDefaultValue,
+      description: commentDefaultValue,
     },
   });
 
@@ -72,8 +73,8 @@ function EditTransactionForm() {
         foundObject.type === "INCOME"
           ? Math.abs(data.amount)
           : Math.abs(data.amount) * -1,
-      transactionDate: format(new Date(data.transactionDate), "yyyy-MM-dd"),
-      comment: data.comment,
+      date: format(new Date(data.date), "yyyy-MM-dd"),
+      description: data.description,
     };
 
     try {
@@ -155,7 +156,7 @@ function EditTransactionForm() {
             onClick={() => setIsDatePickerOpen(true)}
           >
             <Controller
-              name="transactionDate"
+              name="date"
               control={control}
               defaultValue={startDateDefaultValue}
               render={({ field }) => (
@@ -172,7 +173,7 @@ function EditTransactionForm() {
                   calendarClassName={styles.calendarClassName}
                   showPopperArrow={false}
                   popperClassName={styles.calendarPopper}
-                  locale="en-US"
+                  locale={enUS}
                   maxDate={new Date()}
                   renderCustomHeader={({
                     date,
@@ -234,13 +235,13 @@ function EditTransactionForm() {
         </div>
         <div className={clsx(styles.comment, styles.comment_bottom)}>
           <input
-            {...register("comment")}
+            {...register("description")}
             type="text"
             className={styles.input}
             placeholder="Comment"
             autoComplete="off"
           />
-          {errors.comment && (
+          {errors.description && (
             <span className={styles.comment_err}>Enter a comment</span>
           )}
         </div>

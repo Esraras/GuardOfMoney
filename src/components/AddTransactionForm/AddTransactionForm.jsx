@@ -1,5 +1,5 @@
 import styles from "./AddTransactionForm.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,92 +7,50 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { format } from "date-fns";
-import { selectCategories } from "../../redux/Statistics/selectors";
-import { useSelector } from "react-redux";
+import { enUS } from "date-fns/locale";
+import {
+  selectCategories,
+  selectStatError,
+  selectStatLoading,
+} from "../../redux/Statistics/selectors";
+import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import { customStyles } from "./customStyles";
-import { useDispatch } from "react-redux";
 import { addTransactions } from "../../redux/transactions/operations";
 import { closeAddModal } from "../../redux/Modals/slice";
+import { getTransactionsCategories } from "../../redux/Statistics/operations";
 import CustomDropIndicator from "../CustomDropIndicator/CustomDropIndicator";
 import { toast } from "react-toastify";
 
 function AddTransactionForm() {
   const categoriesFromAPI = useSelector(selectCategories);
+  const categoriesLoading = useSelector(selectStatLoading);
+  const categoriesError = useSelector(selectStatError);
+  const dispatch = useDispatch();
 
-  const defaultCategories = [
-    {
-      id: "c9d9e447-1b83-4238-8712-edc77b18b739",
-      name: "Main expenses",
-      type: "EXPENSE",
-    },
-    {
-      id: "27eb4b75-9a42-4991-a802-4aefe21ac3ce",
-      name: "ZİGA GYM",
-      type: "EXPENSE",
-    },
-    {
-      id: "3caa7ba0-79c0-40b9-ae1f-de1af1f6e386",
-      name: "Car",
-      type: "EXPENSE",
-    },
-    {
-      id: "bbdd58b8-e804-4ab9-bf4f-695da5ef64f4",
-      name: "Self care",
-      type: "EXPENSE",
-    },
-    {
-      id: "76cc875a-3b43-4eae-8fdb-f76633821a34",
-      name: "Child care",
-      type: "EXPENSE",
-    },
-    {
-      id: "128673b5-2f9a-46ae-a428-ec48cf1effa1",
-      name: "Household products",
-      type: "EXPENSE",
-    },
-    {
-      id: "1272fcc4-d59f-462d-ad33-a85a075e5581",
-      name: "Education",
-      type: "EXPENSE",
-    },
-    {
-      id: "c143130f-7d1e-4011-90a4-54766d4e308e",
-      name: "Cosmetics",
-      type: "EXPENSE",
-    },
-    {
-      id: "719626f1-9d23-4e99-84f5-289024e437a8",
-      name: "Other expenses",
-      type: "EXPENSE",
-    },
-    {
-      id: "3acd0ecd-5295-4d54-8e7c-d3908f4d0402",
-      name: "Entertainment",
-      type: "EXPENSE",
-    },
-    {
-      id: "063f1132-ba5d-42b4-951d-44011ca46262",
-      name: "Income",
-      type: "INCOME",
-    },
-  ];
+  useEffect(() => {
+    if (
+      !categoriesLoading &&
+      !categoriesError &&
+      (!categoriesFromAPI || categoriesFromAPI.length === 0)
+    ) {
+      dispatch(getTransactionsCategories());
+    }
+  }, [categoriesFromAPI, categoriesError, categoriesLoading, dispatch]);
 
-  const categories =
-    categoriesFromAPI && categoriesFromAPI.length > 0
-      ? categoriesFromAPI
-      : defaultCategories;
+  const categories = categoriesFromAPI || [];
   const [isChecked, setIsChecked] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const handleChange = () => {
     setIsChecked(!isChecked);
   };
-  const dispatch = useDispatch();
 
-  const categoriesForSelect = categories.map((category) => ({
-    value: category.id,
-    label: category.name,
-  }));
+  const categoriesForSelect = categories
+    .filter((category) => category.name?.toLowerCase() !== "income")
+    .map((category) => ({
+      value: category.id,
+      label: category.name,
+    }));
 
   const selectDefaultValue = categoriesForSelect.find(
     (item) => item.label === "Main expenses",
@@ -100,17 +58,23 @@ function AddTransactionForm() {
 
   const [selectedOption, setSelectedOption] = useState(null);
 
+  useEffect(() => {
+    if (!selectedOption && selectDefaultValue) {
+      setSelectedOption(selectDefaultValue);
+    }
+  }, [selectedOption, selectDefaultValue]);
+
   const currentDate = new Date();
 
   const schema = yup.object().shape({
     amount: yup.number().required("Number invalid value"),
-    transactionDate: yup
+    date: yup
       .date()
       .required("Date is required")
       .default(() => currentDate),
     switch: yup.boolean(),
     category: yup.string(),
-    comment: yup.string().required(),
+    description: yup.string().required("Enter a comment"),
   });
 
   const {
@@ -120,54 +84,55 @@ function AddTransactionForm() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      date: currentDate,
+      switch: false,
+      description: "",
+    },
   });
 
   const onSubmit = (data) => {
-    // Backend'e gidecek temiz obje
-    const finalData = {
-      amount: Number(data.amount),
-      date: format(new Date(data.transactionDate || currentDate), "yyyy-MM-dd"),
-      comment: data.comment,
-      type: "...",
-      categoryId: "...",
-    };
+    if (!categories || categories.length === 0) {
+      toast.error("Categories are not loaded yet. Please wait and try again.");
+      return;
+    }
 
     if (!isChecked) {
-      // INCOME Ayarları
-      const incomeCategory = categories.find((el) => el.type === "INCOME");
+      // Income
+      const incomeCategory = categories.find(
+        (el) =>
+          el.type === "INCOME" ||
+          el.name?.toLowerCase() === "income"
+      );
+
       if (!incomeCategory) {
         toast.error("Income category not found");
         return;
       }
-      finalData.categoryId = incomeCategory.id;
-      finalData.type = "INCOME";
-      finalData.amount = Math.abs(finalData.amount);
-    } else {
-      // EXPENSE Ayarları
-      finalData.type = "EXPENSE";
-      finalData.amount = Math.abs(finalData.amount) * -1;
 
+      data.categoryId = incomeCategory.id;
+      data.type = "INCOME";
+      data.amount = Math.abs(data.amount);
+    } else {
+      // Expense
       if (selectedOption) {
-        finalData.categoryId = selectedOption.value;
+        data.categoryId = selectedOption.value;
       } else {
-        const defaultExpense = categories.find(
-          (el) => el.name === "Main expenses",
-        );
-        finalData.categoryId = defaultExpense?.id;
+        toast.error("Please select an expense category");
+        return;
       }
+      data.type = "EXPENSE";
+      data.amount = Math.abs(data.amount) * -1;
     }
 
-    // API'ye data yerine finalData gönderiyoruz
-    dispatch(addTransactions(finalData))
+    dispatch(addTransactions(data))
       .unwrap()
       .then(() => {
         toast.success("Transaction added successfully");
         dispatch(closeAddModal());
       })
       .catch((error) => {
-        // Backend'den gelen hata mesajını görmek için:
-        console.log("API Hatası Detayı:", error);
-        toast.error(error?.message || "Failed to add transaction");
+        toast.error(error || "Failed to add transaction");
       });
   };
 
@@ -208,26 +173,36 @@ function AddTransactionForm() {
       </div>
       {isChecked && (
         <div className={styles.comment}>
-          <Select
-            classNamePrefix="react-select"
-            styles={customStyles}
-            className={styles.select_form}
-            defaultValue={selectDefaultValue}
-            onChange={setSelectedOption}
-            options={categoriesForSelect}
-            placeholder="Select a category"
-            onMenuOpen={handleMenuOpen}
-            onMenuClose={handleMenuClose}
-            components={{
-              DropdownIndicator: () => {
-                return menuIsOpen ? (
-                  <CustomDropIndicator up={true} />
-                ) : (
-                  <CustomDropIndicator up={false} />
-                );
-              },
-            }}
-          />
+          {categoriesLoading ? (
+            <div className={styles.comment_err}>Loading categories...</div>
+          ) : categoriesError ? (
+            <div className={styles.comment_err}>Failed to load categories</div>
+          ) : categoriesForSelect.length === 0 ? (
+            <div className={styles.comment_err}>
+              No categories available. Please create categories first.
+            </div>
+          ) : (
+            <Select
+              classNamePrefix="react-select"
+              styles={customStyles}
+              className={styles.select_form}
+              value={selectedOption}
+              onChange={setSelectedOption}
+              options={categoriesForSelect}
+              placeholder="Select a category"
+              onMenuOpen={handleMenuOpen}
+              onMenuClose={handleMenuClose}
+              components={{
+                DropdownIndicator: () => {
+                  return menuIsOpen ? (
+                    <CustomDropIndicator up={true} />
+                  ) : (
+                    <CustomDropIndicator up={false} />
+                  );
+                },
+              }}
+            />
+          )}
         </div>
       )}
       <div className={styles.sum_data_wrap}>
@@ -254,7 +229,7 @@ function AddTransactionForm() {
           onClick={() => setIsDatePickerOpen(true)}
         >
           <Controller
-            name="transactionDate"
+            name="date"
             control={control}
             render={({ field }) => (
               <>
@@ -269,7 +244,7 @@ function AddTransactionForm() {
                   maxDate={currentDate}
                   showPopperArrow={false}
                   popperClassName={styles.calendarPopper}
-                  locale="en-US"
+                  locale={enUS}
                   renderCustomHeader={({
                     date,
                     decreaseMonth,
@@ -331,14 +306,16 @@ function AddTransactionForm() {
       </div>
       <div className={clsx(styles.comment_bottom)}>
         <input
-          {...register("comment")}
+          {...register("description")}
           type="text"
           className={styles.input}
           placeholder="Comment"
           autoComplete="off"
         />
-        {errors.comment && (
-          <span className={styles.comment_err}>{"Enter a comment"}</span>
+        {errors.description && (
+          <span className={styles.comment_err}>
+            {errors.description.message}
+          </span>
         )}
       </div>
       <button className={clsx(styles.btn, styles.btn_add)} type="submit">
