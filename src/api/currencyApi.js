@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const ROOT = import.meta.env.DEV ? "/" : "https://wallet.b.goit.study/";
+const ROOT = import.meta.env.VITE_API_URL || "https://guard-of-money.vercel.app";
 const API_BASE_URL = `${ROOT.replace(/\/?$/, "")}/api`;
 const CACHE_KEY = "currencyRatesCache";
 const CACHE_DURATION = 3600000; // 1 hour
