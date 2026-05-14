@@ -17,7 +17,13 @@ const PORT = process.env.API_PORT || 3001;
 // Middleware
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "https://guard-of-money.vercel.app",
+    origin: function (origin, callback) {
+      if (!origin || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS hatası: Bu adresten erişim engellendi."));
+      }
+    },
     credentials: true,
   })
 );
