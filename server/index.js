@@ -17,8 +17,21 @@ const PORT = process.env.API_PORT || 3001;
 // Middleware
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "https://guard-of-money.vercel.app",
+    origin: function (origin, callback) {
+      // Localhost ve Vercel linkine izin ver
+      const allowedOrigins = [
+        "https://guard-of-money.vercel.app", 
+        "http://localhost:3000" // Geliştirme aşaması için
+      ];
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS policy violation"));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 app.use(express.json());
