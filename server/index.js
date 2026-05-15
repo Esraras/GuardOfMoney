@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { PrismaClient } from '@prisma/client';
+import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import transactionRoutes from "./routes/transactions.js";
 import categoryRoutes from "./routes/categories.js";
@@ -13,6 +14,7 @@ dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.API_PORT || 3001;
+const __filename = fileURLToPath(import.meta.url);
 
 // Middleware
 app.use(
@@ -73,6 +75,8 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-startServer();
+if (process.argv[1] === __filename) {
+  startServer();
+}
 
 export { app, prisma };
