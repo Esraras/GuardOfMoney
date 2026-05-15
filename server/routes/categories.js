@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Get all categories for user
+// Get all categories (shared across users)
 router.get("/", async (req, res) => {
   try {
     const { month, year } = req.query;
@@ -19,7 +19,6 @@ router.get("/", async (req, res) => {
     }
 
     const categories = await prisma.category.findMany({
-      where: { userId: req.userId },
       include,
       orderBy: { name: "asc" },
     });

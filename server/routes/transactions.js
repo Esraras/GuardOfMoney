@@ -66,13 +66,13 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Verify category belongs to user
+    // Verify category exists
     const category = await prisma.category.findUnique({
       where: { id: categoryId },
     });
 
-    if (!category || category.userId !== req.userId) {
-      return res.status(403).json({ error: "Unauthorized category" });
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
     }
 
     // Verify account belongs to user
@@ -238,8 +238,8 @@ router.get("/category/:categoryId", async (req, res) => {
       where: { id: categoryId },
     });
 
-    if (!category || category.userId !== req.userId) {
-      return res.status(403).json({ error: "Unauthorized" });
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
     }
 
     const transactions = await prisma.transaction.findMany({

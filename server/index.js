@@ -20,7 +20,14 @@ const __filename = fileURLToPath(import.meta.url);
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || origin.endsWith(".vercel.app")) {
+      if (
+        !origin ||
+        origin.endsWith(".vercel.app") ||
+        origin.startsWith("http://localhost") ||
+        origin.startsWith("http://127.0.0.1") ||
+        origin.startsWith("https://localhost") ||
+        origin.startsWith("https://127.0.0.1")
+      ) {
         callback(null, true);
       } else {
         callback(new Error("CORS hatası: Bu adresten erişim engellendi."));

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://guard-of-money.vercel.app/api";
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? "http://localhost:3001/api" : "/api");
 
 export const userTransactionsApi = axios.create({
   baseURL: BASE_URL,
