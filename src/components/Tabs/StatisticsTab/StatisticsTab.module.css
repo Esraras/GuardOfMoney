@@ -23,7 +23,7 @@
   color: rgba(251, 251, 251, 1);
 }
 
-.statisticsPage .dashboardAndTable {
+.dashboardAndTable {
   display: flex;
   flex-direction: column;
   padding: 0 20px;
@@ -52,12 +52,12 @@
 @media screen and (min-width: 1280px) {
   .statisticsPage {
     display: flex;
-
+    margin-top: 65px;
     margin-left: 50px;
     margin-top: 20px;
   }
 
-  .statisticsPage .dashboardAndTable {
+  .dashboardAndTable {
     margin-top: 65px;
   }
 }
