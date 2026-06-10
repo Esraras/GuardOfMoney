@@ -28,9 +28,13 @@ const TransactionItem = ({ transaction }) => {
       });
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateValue) => {
     try {
-      const date = dateString ? parseISO(dateString) : new Date();
+      const date = dateValue
+        ? typeof dateValue === "string"
+          ? parseISO(dateValue)
+          : new Date(dateValue)
+        : new Date();
       return format(date, "yyyy-MM-dd");
     } catch {
       return format(new Date(), "yyyy-MM-dd");

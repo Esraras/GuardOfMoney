@@ -7,6 +7,7 @@
   width: max-content;
   padding: 12px 18px;
   border-radius: 18px;
+  background-color: #E5E4E2;
 }
 
 /* Buton Genel Stili */
@@ -21,29 +22,26 @@
   align-items: center;
   transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
   padding: 0;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--button-bg-color);
 }
 
 /* Buton İçindeki SVG */
 .navIcon {
   width: 25px;
   height: 25px;
-  fill: #b7a6d6; /* Pasif ikon rengi */
+  fill: var(--button-text-color);
   transition: fill 140ms ease, transform 120ms ease;
 }
 
 .navItemActive {
-  background: linear-gradient(135deg, #8b5cff 0%, #6e3bff 100%);
-  box-shadow: 0 12px 30px rgba(123, 77, 255, 0.42);
+  background: #173721;
+  box-shadow: 0 12px 30px rgba(30, 77, 43, 0.25);
 }
 /* Aktif Butonun İçindeki SVG */
 .navIconActive {
-  fill: #ffffff;
+  fill: #90EE90;
 }
 
-.navItem:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
 .span{
     display: none;
 }
@@ -55,13 +53,14 @@
   .span {
     display: flex;
     font-size: 20px;
-    color: thistle;
+    color: #010B13;
     margin-left: 8px;
   }
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    background-color: transparent;
   }
   .navbar {
     flex-direction: column;

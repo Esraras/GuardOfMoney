@@ -34,10 +34,10 @@ function Bar({ password, confirmPassword }) {
 
   const strengthBarStyles = {
     width: `${strength ? strength * 25 : 0}%`,
-    backgroundColor: "#ffc727",
+    backgroundColor: "#1E4D2B",
     filter:
       strength > 0
-        ? `drop-shadow(0px 1px 8px rgba(255, 182, 39, 0.50))`
+        ? `drop-shadow(0px 1px 8px rgba(30, 77, 43, 0.35))`
         : "none",
   };
   return (

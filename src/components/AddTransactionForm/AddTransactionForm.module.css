@@ -36,8 +36,8 @@
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  background-color: #E5E4E2;
+  box-shadow: 0px 6px 15px rgba(1, 11, 19, 0.08);
 }
 
 .switch__slider:before {
@@ -46,27 +46,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--button-text-color);
   font-size: 24px;
   height: 44px;
   width: 44px;
   left: -2px;
   top: -2px;
-  background-color: #ffb627;
+  background-color: var(--button-bg-color);
   transition: 0.4s;
   border-radius: 50%;
-  box-shadow: 0px 6px 15px rgba(255, 182, 39, 0.5);
+  box-shadow: 0px 6px 15px rgba(30, 77, 43, 0.25);
 }
 
 .switch__input:checked + .switch__slider:before {
   transform: translateX(40px);
   content: "-";
-  background-color: #ff868d;
-  box-shadow: 0px 6px 15px rgba(255, 134, 141, 0.5);
+  background-color: var(--button-bg-color);
+  box-shadow: 0px 6px 15px rgba(30, 77, 43, 0.25);
 }
 
 .span_text {
-  color: rgba(255, 255, 255, 0.6);
+  color: #010B13;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -78,12 +78,9 @@
   transition: color 0.4s;
 }
 
-.income_active {
-  color: #ffb627;
-}
-
+.income_active,
 .expense_active {
-  color: #ff868d;
+  color: #1E4D2B;
 }
 
 .comment {
@@ -109,21 +106,21 @@
   width: 100%;
   padding: 8px;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(1, 11, 19, 0.25);
   font-size: 18px;
   font-weight: 600;
   line-height: normal;
-  color: #fbfbfb;
+  color: #010B13;
   background-color: transparent;
 }
 
 .sum:focus {
   outline: none;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #1E4D2B;
 }
 
 .sum::placeholder {
-  color: #bdbdbd;
+  color: rgba(1, 11, 19, 0.6);
 }
 
 .data_wrap {
@@ -136,18 +133,18 @@
   width: 100%;
   padding: 8px;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(1, 11, 19, 0.25);
   font-size: 18px;
   font-weight: 600;
   line-height: normal;
-  color: #fbfbfb;
+  color: #010B13;
   background-color: transparent;
   cursor: pointer;
 }
 
 .customDatePicker:focus {
   outline: none;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #1E4D2B;
 }
 
 .svg_wrap {
@@ -167,21 +164,21 @@
   width: 100%;
   padding: 8px;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(1, 11, 19, 0.25);
   font-size: 18px;
   font-weight: 400;
   line-height: normal;
-  color: #fbfbfb;
+  color: #010B13;
   background-color: transparent;
 }
 
 .input:focus {
   outline: none;
-  border-bottom: 1px solid #ffffff;
+  border-bottom: 1px solid #1E4D2B;
 }
 
 .input::placeholder {
-  color: #bdbdbd;
+  color: rgba(1, 11, 19, 0.6);
 }
 
 .btn {
@@ -197,30 +194,18 @@
 }
 
 .btn_add {
-  background: linear-gradient(
-    97deg,
-    #ffc727 -16.42%,
-    #9e40ba 97.04%,
-    #7000ff 150.71%
-  );
+  background: var(--button-bg-color);
   border: none;
-  color: #ffffff;
-  box-shadow: 1px 9px 15px 0px rgba(0, 0, 0, 0.2);
+  color: var(--button-text-color);
+  box-shadow: 1px 9px 15px 0px rgba(0, 0, 0, 0.1);
   transition: all 0.4s ease;
 }
 
 .btn_add:hover,
 .btn_add:focus {
-  transform: scale(1.05);
-  background-image: linear-gradient(
-    to right,
-    #7000ff 0%,
-    #9e40ba 31%,
-    #ffc727 100%
-  );
-  background-size: 200%;
-  background-position: right center;
-  box-shadow: 1px 9px 20px 0px rgba(0, 0, 0, 0.3);
+  transform: scale(1.03);
+  background: #173721;
+  box-shadow: 1px 9px 20px 0px rgba(30, 77, 43, 0.18);
 }
 
 .btn_add:active {
@@ -230,24 +215,17 @@
 }
 
 .btn_cancel {
-  background: #fbfbfb;
-  color: #623f8b;
-  box-shadow: 1px 9px 15px 0px rgba(0, 0, 0, 0.2);
+  background: #E5E4E2;
+  color: #010B13;
+  box-shadow: 1px 9px 15px 0px rgba(0, 0, 0, 0.08);
   transition: all 0.4s ease;
 }
 
 .btn_cancel:hover,
 .btn_cancel:focus {
-  transform: scale(1.05);
-  background-image: linear-gradient(
-    to right,
-    rgb(255, 255, 255) 0%,
-    rgb(98, 63, 139) 31%,
-    rgb(255, 255, 255) 100%
-  );
-  background-size: 200%;
-  background-position: right center;
-  box-shadow: 1px 9px 20px 0px rgba(0, 0, 0, 0.3);
+  transform: scale(1.03);
+  background: #d8d6d3;
+  box-shadow: 1px 9px 20px 0px rgba(0, 0, 0, 0.12);
 }
 
 .btn_cancel:active {
@@ -260,7 +238,7 @@
   position: absolute;
   bottom: -20px;
   left: 10px;
-  color: #ff6596;
+  color: #B00020;
   font-size: 14px;
 }
 

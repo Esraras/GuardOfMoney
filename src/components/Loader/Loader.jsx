@@ -3,12 +3,10 @@ import { Vortex } from "react-loader-spinner";
 import styles from "./Loader.module.css";
 
 const LOADER_COLORS = [
-  "#FFB627",
-  "#9E40BA",
-  "#7000FF",
-  "#4A56E2",
-  "#FFC727",
-  "#734AEF",
+  "#1E4D2B",
+  "#173721",
+  "#A3BBA2",
+  "#E5E4E2",
 ];
 
 const Loader = () => {

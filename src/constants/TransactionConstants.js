@@ -55,40 +55,40 @@ const YEARS_OPTIONS = [CURRENT_YEAR, CURRENT_YEAR - 1, CURRENT_YEAR - 2];
 const getTrasactionCategoryColor = (category) => {
   switch (category) {
     case "Ana Harcamalar":
-      return "rgba(254, 208, 87, 1)";
+      return "#fac686";
 
     case "Ürün":
-      return "rgba(255, 0, 255, 1)";
+      return "#e792a9";
 
     case "Araba":
-      return "rgba(253, 148, 152, 1)";
+      return "#ee866c";
 
     case "Özbakım":
-      return "rgba(197, 186, 255, 1)";
+      return "#9187c4";
 
     case "Çocuk Bakım":
-      return "rgba(127, 255, 0, 1)";
+      return "#96db93";
 
     case "Ev Giderleri":
-      return "rgb(0, 7, 83)";
+      return "#41586e";
 
     case "Eğitim":
-      return "rgb(0, 172, 172)";
+      return "#7fc5c5";
 
     case "Gündelik":
-      return "rgba(255, 119, 0, 1)";
+      return "#8d5230";
 
     case "Diğer":
-      return "rgb(143, 255, 229)";
+      return "#f89861";
 
     case "Eğlence":
-      return "rgba(177, 15, 72, 1)";
+      return "#99415e";
 
     case "Income":
-      return "rgb(251, 255, 4)";
+      return "#f0f76b";
 
     default:
-      return "rgb(128, 128, 128)";
+      return "rgb(163, 144, 144)";
   }
 };
 

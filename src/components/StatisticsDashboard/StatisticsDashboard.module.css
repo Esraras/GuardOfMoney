@@ -8,9 +8,9 @@
   /* appearance: none; */
   padding: 12px 20px 14px 20px;
   outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  color: rgba(255, 255, 255, 0.6);
-  background-color: rgba(74, 86, 226, 0.1);
+  border: 1px solid #1E4D2B;
+  color: #010B13;
+  background-color: #E5E4E2;
   box-shadow: 0px 4px 60px 0px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   font-size: 16px;
@@ -21,25 +21,25 @@
 }
 
 .dropdownsWrapper select option {
-  background-color: rgba(158, 64, 186, 0.5);
+  background-color: #E5E4E2;
   box-shadow: 0px 4px 60px 0px rgba(0, 0, 0, 0.25);
-  color: rgba(255, 255, 255, 0.6);
+  color: #010B13;
 
-  background-color: rgba(106, 70, 165, 0.525);
-  background-color: rgba(80, 48, 154, 0.7);
+  background-color: #E5E4E2;
+  background-color: #E5E4E2;
   /* background-color: rgba(83, 61, 186, 0.7); */
 }
 
 .dropdownsWrapper select:hover {
-  color: rgba(251, 251, 251, 1);
-  border: 1px solid rgba(251, 251, 251, 1);
+  color: #010B13;
+  border: 1px solid #010B13;
   transition: all 0.5s ease 0s;
 }
 
 .dropdownsWrapper select:focus {
-  border: 1px solid rgba(255, 134, 141, 1);
+  border: 1px solid #90EE90;
   transition: all 0.5s ease 0s;
-  color: rgba(255, 134, 141, 1);
+  color: #010B13;
   font-weight: bold;
 }
 

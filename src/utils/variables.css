@@ -1,46 +1,47 @@
 :root {
-  --text-color: #fbfbfb;
-  --icon-active: #734aef;
+  --text-color: #010B13;
+  --background-color: #E5E4E2;
+  --button-bg-color: #1E4D2B;
+  --button-text-color: #ffffff;
+  --icon-color: #1E4D2B;
+  --icon-active: #1E4D2B;
   --red-color: #ff868d;
-  --white-color: #fff;
+  --white-color: #ffffff;
   --yellow-color: #ffb627;
-  --text-button: #623f8b;
-  --button-color: #fcfcfc;
-  --text-rgba: rgba(255, 255, 255, 0.6);
-  --bg-form: rgba(255, 255, 255, 0.1);
+  --text-button: #010B13;
+  --button-color: #1E4D2B;
+  --text-rgba: rgba(1, 11, 19, 0.6);
+  --bg-form: rgba(229, 228, 226, 0.65);
 
   --button-gradient: linear-gradient(
     167deg,
-    #ffc727 0%,
-    #9e40ba 61.46%,
-    #7000ff 90.54%
+    #1E4D2B 0%,
+    #1E4D2B 61.46%,
+    #173721 90.54%
   );
   --dropdown: linear-gradient(
     360deg,
-    rgba(83, 61, 186, 0.7) 0%,
-    rgba(80, 48, 154, 0.7) 35.94%,
-    rgba(106, 70, 165, 0.7) 61.04%,
-    rgba(133, 93, 175, 0.7) 100%
+    rgba(30, 77, 43, 0.7) 0%,
+    rgba(30, 77, 43, 0.7) 35.94%,
+    rgba(30, 77, 43, 0.7) 61.04%,
+    rgba(30, 77, 43, 0.7) 100%
   );
 
-  
   /* COLOR PALETTE */
   --yellow: #ffb627;
   --yellow-color: #ffb627;
-  --red-color: #ff6596;
-  --icon-violet: #734aef;
-  --white: #fbfbfb;
-  --white-color: #fbfbfb;
+  --red-color: #ff868d;
+  --icon-violet: #1E4D2B;
+  --white: #ffffff;
+  --white-color: #ffffff;
   --white-400: rgba(255, 255, 255, 0.4);
   --white-600: rgba(255, 255, 255, 0.6);
-  --text-button: #623f8b;
-  --text-color: #fbfbfb;
-  --dashboard-text: #ff868d;
+  --dashboard-text: #1E4D2B;
   --form-color: rgba(255, 255, 255, 0.1);
+
   /* FONT */
   --font-family: 'Poppins', sans-serif;
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-
 }

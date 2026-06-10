@@ -2,12 +2,13 @@
   display: flex;
   align-items: center;
   padding: 15px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--white-color);
+  border-bottom: 1px solid #1E4D2B;
+  color: #010B13;
   font-size: 14px;
   width: 100%;
   max-width: 715px;
   margin: 0 auto;
+  background-color: #E5E4E2;
 }
 
 .transactionItem:last-child {
@@ -17,7 +18,7 @@
 .transactionDate {
   width: 125px;
   font-size: 14px;
-  color: var(--white-color);
+  color: #010B13;
 }
 
 .transactionType {
@@ -26,20 +27,13 @@
   display: flex;
   justify-content: center;
   text-align: center;
-}
-
-.income .transactionType {
-  color: var(--yellow-color);
-}
-
-.expense .transactionType {
-  color: var(--red-color);
+  color: #010B13;
 }
 
 .transactionCategory {
   width: 150px;
   text-transform: capitalize;
-  color: var(--white-color);
+  color: #010B13;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -47,7 +41,7 @@
 
 .transactionComment {
   width: 170px;
-  color: var(--white-color);
+  color: #010B13;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -60,14 +54,7 @@
   font-weight: 600;
   font-size: 14px;
   text-align: right;
-}
-
-.income .transactionAmount {
-  color: var(--yellow-color);
-}
-
-.expense .transactionAmount {
-  color: var(--red-color);
+  color: #010B13;
 }
 
 .transactionActions {
@@ -81,24 +68,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: #E5E4E2;
   border: none;
   padding: 4px;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.6);
+  
   transition: all 0.3s ease;
   width: 24px;
   height: 24px;
 }
-
+.editButton svg {
+  color: #010B13;
+}
 .editButton:hover {
-  color: var(--white-color);
-  transform: scale(1.1);
+  filter: brightness(1.1);
+  transform: scale(1.05);
 }
 
 .deleteButton {
-  background: linear-gradient(to right, #ffc727, #ff7a85);
-  color: var(--white-color);
+  background: var(--button-bg-color);
+  color: var(--button-text-color);
   border: none;
   border-radius: 20px;
   padding: 6px 16px;
@@ -110,8 +99,8 @@
 }
 
 .deleteButton:hover {
-  opacity: 0.9;
-  transform: scale(1.05);
+  filter: brightness(1.1);
+  transform: scale(1.03);
 }
 
 /* Mobile view styles */
@@ -125,12 +114,13 @@
 .mobileLabel {
   font-weight: 600;
   text-transform: capitalize;
-  color: var(--white-color);
-  opacity: 0.6;
+  color: #010B13;
+  opacity: 0.8;
 }
 
 .mobileValue {
   text-align: right;
+  color: #010B13;
 }
 
 .mobileActions {
@@ -146,10 +136,9 @@
     flex-direction: column;
     padding: 12px 15px;
     margin-bottom: 8px;
-    background-color: rgba(82, 59, 126, 0.6);
+    background-color: #E5E4E2;
+    border: 1px solid #1E4D2B;
     border-radius: 8px;
-    box-shadow: 0px 4px 60px 0px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(50px);
     width: 280px;
   }
 }

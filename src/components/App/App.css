@@ -10,13 +10,13 @@
   box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.2);
 }
 .color_btn {
-  background: var(--button-gradient);
-  color: var(--text-color);
+  background: var(--button-bg-color);
+  color: var(--button-text-color);
 }
 
 .white_btn {
-  background: var(--button-color);
-  color: var(--text-button);
+  background: #E5E4E2;
+  color: #010B13;
 }
 .btn_delete {
   border-radius: 20px;
@@ -25,9 +25,9 @@
   height: 29px;
   font-size: 14px;
   text-align: center;
-  background: var(--button-gradient);
-  color: var(--text-color);
-  box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.2);
+  background: var(--button-bg-color);
+  color: var(--button-text-color);
+  box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.12);
 }
 .btn_plus {
   display: flex;
@@ -35,9 +35,9 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: var(--button-gradient);
+  background: var(--button-bg-color);
   border-radius: 100%;
-  box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 9px 15px 0 rgba(0, 0, 0, 0.12);
 }
 
 .modal_backdrop {
@@ -49,7 +49,7 @@
 
 /* Scrollbar styles */
 body {
-  scrollbar-color: #9e40ba #623f8b;
+  scrollbar-color: #1E4D2B #E5E4E2;
 }
 
 ::-webkit-scrollbar {
@@ -57,11 +57,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #623f8b;
+  background: #E5E4E2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9e40ba;
+  background: #1E4D2B;
   height: 20px;
 }
 

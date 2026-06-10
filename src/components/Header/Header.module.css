@@ -1,10 +1,11 @@
 /* --- VARSAYILAN: MOBİL STİLLER (0px - 767px) --- */
 .navbar {
-  background-color: #241744;
-  color: white;
+  background-color: #E5E4E2;
+  color: #010B13;
   padding: 10px 15px; /* Mobilde daha dar padding */
   font-family: sans-serif;
   width: 100%;
+  border-bottom: #1E4D2B solid 1px;
 }
 .divider {
   display: none;
@@ -13,7 +14,7 @@
   display: none;
 }
 .iconExit {
-  fill: thistle;
+  fill: #1E4D2B;
   width: 23px;
   height: 23px;
 }
@@ -46,13 +47,13 @@
 .userName {
   font-size: 20px;
   opacity: 0.9;
-  color: thistle;
+  color: #010B13;
 }
 
 .exitBtn {
   background: none;
   border: none;
-  color: white;
+  color: #010B13;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -62,7 +63,7 @@
 }
 
 .icon {
-  fill: thistle;
+  fill: #1E4D2B;
   width: 90px;
   height: 40px;
 }
@@ -89,20 +90,20 @@
   .divider {
     width: 1px;
     height: 24px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #1E4D2B;
   }
-
   .userName {
     font-size: 20px;
   }
   .icon {
     width: 120px;
     height: 50px;
+    color: #1E4D2B;
   }
   .spanExit {
     display: flex;
     font-size: 20px;
-    color: thistle;
+    color: #1E4D2B;
     margin-left: 8px;
   }
   .divider {

@@ -31,8 +31,8 @@
   /* overflow: hidden; */
 
   color: var(--text-color);
-  background-color: black;
-  background-image: url("./../public/img/gradient-desktop.webp");
+  background-color: var(--background-color);
+  background-image: none;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -44,19 +44,36 @@
   -webkit-text-size-adjust: 100%;
 }
 
+body {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button[class*="btn"],
+button[class*="button"],
+button[class*="Btn"] {
+  color: var(--button-text-color) ;
+}
+
+
 @media only screen and (max-width: 767.98px) {
   :root {
-    background-image: url("./../public/img/gradient-mobile.webp");
+    background-image: none;
   }
 }
 @media only screen and (min-width: 768px) {
   :root {
-    background-image: url("./../public/img/gradient-tablet.webp");
+    background-image: none;
   }
 }
 @media only screen and (min-width: 1280px) {
   :root {
-    background-image: url("./../public/img/gradient-desktop.webp");
+    background-image: none;
   }
 }
 

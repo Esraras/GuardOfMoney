@@ -1,5 +1,6 @@
 import React, { useState, useEffect, memo, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { format } from "date-fns";
 import { openAddModal } from "../../redux/Modals/slice";
 import TransactionItem from "../TransactionsItem/TransactionsItem";
 import styles from "./TransactionsList.module.css";
@@ -33,6 +34,7 @@ const TransactionList = () => {
     key: "date",
     direction: "desc",
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const requestSort = useCallback((key) => {
     setSortConfig((prevConfig) => ({
@@ -64,6 +66,24 @@ const TransactionList = () => {
     [transactions, categories, sortConfig]
   );
 
+  const filteredTransactions = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return formattedTransactions;
+    }
+
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return formattedTransactions.filter((transaction) => {
+      const formattedDate = transaction.date
+        ? format(transaction.date, "yyyy-MM-dd")
+        : "";
+      const comment = transaction.comment || "";
+      return (
+        formattedDate.toLowerCase().includes(normalizedSearch) ||
+        comment.toLowerCase().includes(normalizedSearch)
+      );
+    });
+  }, [formattedTransactions, searchTerm]);
+
   if (isLoading) {
     return <Loader />;
   }
@@ -91,6 +111,15 @@ const TransactionList = () => {
 
   return (
     <div className={styles.tableContainer}>
+      <div className={styles.searchContainer}>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder="Search by date or comment"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
       {!isMobile && (
         <div className={styles.tableHeader}>
           <div
@@ -137,7 +166,7 @@ const TransactionList = () => {
         </div>
       )}
       <ul className={styles.transactionList}>
-        {formattedTransactions.map((transaction) => (
+        {filteredTransactions.map((transaction) => (
           <TransactionItem key={transaction.id} transaction={transaction} />
         ))}
       </ul>

@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
 
-  background-color: rgba(82, 59, 126, 0.6);
+  background-color: #1E4D2B;
   box-shadow: 0px 4px 60px 0px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   padding: 16px;
@@ -22,9 +22,7 @@
 
 .statisticsTable .noData {
   margin-top: 16px;
-  color: grey;
-  color: rgba(255, 255, 255, 0.6);
-  /* color: rgba(127, 255, 0, 1); */
+  color: #010B13;
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
@@ -37,10 +35,10 @@
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid #1E4D2B;
 
   padding: 14px 16px;
-  color: rgba(251, 251, 251, 1);
+  color: #010B13;
 
   font-size: 14px;
   font-weight: 400;
@@ -61,7 +59,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
+  color: #010B13;
   font-size: 16px;
 }
 
@@ -74,7 +72,7 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
-  color: rgba(251, 251, 251, 1);
+  color: #010B13;
 }
 
 .totalExpenses,
@@ -85,11 +83,11 @@
 }
 
 .totalExpenses span:nth-of-type(2) {
-  color: rgba(255, 134, 141, 1);
+  color: #00A86B;
 }
 
 .totalIncome span:nth-of-type(2) {
-  color: rgba(255, 182, 39, 1);
+  color: #1E4D2B;
 }
 
 @media screen and (min-width: 768px) {
