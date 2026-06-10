@@ -3,8 +3,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(36, 23, 68, 0.85); /* Navbar renginde koyu transparan */
-  backdrop-filter: blur(8px); /* Arkadaki içeriği bulanıklaştırır */
+  background: #E5E4E2; 
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,7 @@
 }
 
 .modalText {
-  color: white;
+  color: #010B13;
   font-size: 1.2rem;
   line-height: 1.5;
   margin-bottom: 40px;
@@ -34,7 +34,7 @@
 
 /* Logout Butonu: Turuncudan Mora Gradyan */
 .btnLogout {
-  background: linear-gradient(90deg, #edae49 0%, #b054b1 100%);
+  background: var(--button-bg-color);
   color: white;
   border: none;
   padding: 15px;
@@ -48,8 +48,8 @@
 
 /* Cancel Butonu: Beyaz */
 .btnCancel {
-  background: white;
-  color: #4a3f6b;
+  background: var(--button-bg-color);
+  color: white;
   border: none;
   padding: 15px;
   border-radius: 30px;
@@ -96,11 +96,7 @@
 
   /* Modal Ana Gövdesi */
   .modalContent {
-    background: linear-gradient(
-      135deg,
-      #412e6e,
-      #2e1e59
-    ); /* Koyu mor gradyan */
+    background: #E5E4E2;
     padding: 60px 20px;
     border-radius: 9px;
     width: 100%;
@@ -108,14 +104,14 @@
     height: 447px;
     text-align: center;
     box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.5);
-    color: #fff;
+    color: #010B13;
   }
   .modalText {
     font-family: "Poppins", sans-serif;
     font-size: 13px;
     line-height: 1.5;
     margin-bottom: 52px;
-    color: #ffffff;
+    color: #010B13;
   }
 
   /* Buton Konteynırı */
@@ -148,7 +144,7 @@
   }
 
   .btnCancel {
-    background: #E5E4E2;
+    background: var(--button-bg-color);
     color: #010B13;
   }
 

@@ -29,6 +29,7 @@
 }
 
 .customDatePicker {
+  background-color: transparent;
   cursor: pointer;
 }
 
@@ -104,7 +105,7 @@ input[type="number"]:focus {
 .data_wrap input {
   padding: 0;
   width: 93px;
-  color: #010b13;
+  color: #010B13;
   border: none;
   margin-right: 32px;
 }
@@ -190,7 +191,7 @@ input[type="number"]:focus {
 }
 
 .btn_cancel {
-  background: #e5e4e2;
+  background: var(--button-bg-color);
   color: #010b13;
   text-align: center;
   font-size: 18px;

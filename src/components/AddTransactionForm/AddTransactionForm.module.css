@@ -84,6 +84,7 @@
 }
 
 .comment {
+  color: #010B13;
   width: 100%;
 }
 
@@ -215,7 +216,7 @@
 }
 
 .btn_cancel {
-  background: #E5E4E2;
+  background: var(--button-bg-color);
   color: #010B13;
   box-shadow: 1px 9px 15px 0px rgba(0, 0, 0, 0.08);
   transition: all 0.4s ease;
@@ -243,7 +244,7 @@
 }
 
 .calendarClassName.react-datepicker {
-  background: #ffffff !important;
+  background: #ffffff ;
   border-radius: 8px;
   border: none;
   font-family: "Poppins", sans-serif;
@@ -251,7 +252,7 @@
 }
 
 .calendarClassName .react-datepicker__header {
-  background-color: #ffffff !important;
+  background-color: #ffffff ;
   border: none;
   padding: 0;
   margin-bottom: 20px;

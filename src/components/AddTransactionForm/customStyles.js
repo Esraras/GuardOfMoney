@@ -6,12 +6,14 @@ export const customStyles = {
     outline: "none",
     fontSize: "18px",
     fontWeight: "400",
-    color: "rgba(255, 255, 255, 0.6)",
+    color: "#010B13",
     backgroundColor: "transparent",
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      color: "#FF868D",
+     background:
+      "linear-gradient(0deg, rgba(128, 139, 128, 0.8) 0%, rgba(130, 165, 132, 0.8) 36%, rgba(107, 126, 108, 0.8), rgba(96, 146, 99, 0.8) 100%)",
+   
+      color: "#010B13",
       fontWeight: "400",
     },
     textAlign: "left",
@@ -19,7 +21,7 @@ export const customStyles = {
 
   control: (styles) => ({
     ...styles,
-    color: "#FBFBFB",
+    color: "#010B13",
     fontFamily: "Poppins",
     fontSize: "16px",
     fontStyle: "normal",
@@ -39,7 +41,7 @@ export const customStyles = {
     ...provided,
     opacity: state.isDisabled ? 0.5 : 1,
     transition: "opacity 300ms",
-    color: "#FBFBFB",
+    color: "#010B13",
     padding: "0",
     "@media screen and (max-width: 767.98px)": {
       paddingLeft: "9px",
@@ -49,7 +51,7 @@ export const customStyles = {
   menu: (provided) => ({
     ...provided,
     background:
-      "linear-gradient(0deg, rgba(83, 61, 186, 0.70) 0%, rgba(80, 48, 154, 0.70) 43.14%, rgba(106, 70, 165, 0.52) 73.27%, rgba(133, 93, 175, 0.13) 120.03%)",
+      "linear-gradient(0deg, rgba(172, 248, 176, 0.8) 0%, rgba(136, 192, 140, 0.8) 36%, rgba(124, 199, 129, 0.8), rgba(126, 185, 130, 0.8) 100%)",
     borderRadius: "8px",
     backdropFilter: "blur(50px)",
     overflow: "hidden",
@@ -71,13 +73,13 @@ export const customStyles = {
 
   placeholder: (provider) => ({
     ...provider,
-    color: "rgba(255, 255, 255, 0.60)",
+    color: "rgba(1, 11, 19, 0.60)",
   }),
 
   input: (provided) => ({
     ...provided,
     margin: "0",
-    color: "#FBFBFB",
+    color: "#010B13",
     minWidth: "100%",
     caretColor: "transparent",
   }),

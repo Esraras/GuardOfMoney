@@ -20,10 +20,10 @@
   min-height: 511px;
   background: linear-gradient(
     0deg,
-    rgba(83, 61, 186, 0.8) 0%,
-    rgba(80, 48, 154, 0.8) 36%,
-    rgba(106, 70, 165, 0.8) 61%,
-    rgba(133, 93, 175, 0.8) 100%
+    rgba(73, 197, 81, 0.8) 0%,
+    rgba(139, 245, 146, 0.8) 36%,
+    rgba(87, 240, 97, 0.8),
+    rgba(73, 197, 81, 0.8) 100%
   );
   box-shadow: 0px 4px 60px 0px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(2px);
@@ -35,7 +35,7 @@
 
 .modal h2 {
   margin-bottom: 42px;
-  color: #fbfbfb;
+  color: #010B13;
   font-size: 30px;
   font-style: normal;
   font-weight: 400;
