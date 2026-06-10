@@ -35,6 +35,7 @@ const TransactionList = () => {
     direction: "desc",
   });
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("all");
 
   const requestSort = useCallback((key) => {
     setSortConfig((prevConfig) => ({
@@ -66,23 +67,45 @@ const TransactionList = () => {
     [transactions, categories, sortConfig]
   );
 
-  const filteredTransactions = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return formattedTransactions;
-    }
+  const monthOptions = useMemo(() => {
+    const months = new Map();
+    formattedTransactions.forEach((transaction) => {
+      if (!transaction.date) return;
+      const value = format(transaction.date, "yyyy-MM");
+      const label = format(transaction.date, "MMMM yyyy");
+      if (!months.has(value)) {
+        months.set(value, label);
+      }
+    });
 
+    return [
+      { value: "all", label: "All months" },
+      ...Array.from(months, ([value, label]) => ({ value, label })),
+    ];
+  }, [formattedTransactions]);
+
+  const filteredTransactions = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
     return formattedTransactions.filter((transaction) => {
       const formattedDate = transaction.date
         ? format(transaction.date, "yyyy-MM-dd")
         : "";
       const comment = transaction.comment || "";
-      return (
+      const sum = transaction.sum?.toString() || "";
+      const matchesSearch =
+        !normalizedSearch ||
         formattedDate.toLowerCase().includes(normalizedSearch) ||
-        comment.toLowerCase().includes(normalizedSearch)
-      );
+        comment.toLowerCase().includes(normalizedSearch) ||
+        sum.includes(normalizedSearch);
+
+      const matchesMonth =
+        selectedMonth === "all" ||
+        (transaction.date &&
+          format(transaction.date, "yyyy-MM") === selectedMonth);
+
+      return matchesSearch && matchesMonth;
     });
-  }, [formattedTransactions, searchTerm]);
+  }, [formattedTransactions, searchTerm, selectedMonth]);
 
   if (isLoading) {
     return <Loader />;
@@ -112,10 +135,21 @@ const TransactionList = () => {
   return (
     <div className={styles.tableContainer}>
       <div className={styles.searchContainer}>
+        <select
+          className={styles.monthSelect}
+          value={selectedMonth}
+          onChange={(event) => setSelectedMonth(event.target.value)}
+        >
+          {monthOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         <input
           type="text"
           className={styles.searchInput}
-          placeholder="Search by date or comment"
+          placeholder="Search by date, comment or sum..."
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
         />
