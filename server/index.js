@@ -12,8 +12,14 @@ import { verifyToken } from "./middleware/auth.js";
 
 dotenv.config();
 const app = express();
-const prisma = new PrismaClient();
-const PORT = process.env.API_PORT || 3001;
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
+const PORT = process.env.PORT || process.env.API_PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
 
 // Middleware
@@ -61,19 +67,22 @@ app.use((err, req, res, next) => {
 // Start server
 const startServer = async () => {
   try {
-    // Test database connection
     await prisma.$connect();
     console.log("✅ Database connected successfully");
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-      console.log(`📊 API available at http://localhost:${PORT}/api`);
-    });
+    if (process.argv[1] === __filename) {
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on http://localhost:${PORT}`);
+        console.log(`📊 API available at http://localhost:${PORT}/api`);
+      });
+    }
   } catch (error) {
     console.error("❌ Failed to start server:", error.message);
     process.exit(1);
   }
 };
+
+startServer();
 
 // Graceful shutdown
 process.on("SIGINT", async () => {
@@ -81,9 +90,5 @@ process.on("SIGINT", async () => {
   await prisma.$disconnect();
   process.exit(0);
 });
-
-if (process.argv[1] === __filename) {
-  startServer();
-}
 
 export { app, prisma };
