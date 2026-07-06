@@ -107,7 +107,7 @@ model Transaction {
   categoryId  String          @db.Uuid
   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   account     Account         @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category    Category        @relation(fields: [categoryId], references: [id], onDelete: SetDefault)
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   createdAt   DateTime        @default(now())
 
   @@index([userId])
