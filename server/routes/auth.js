@@ -38,8 +38,8 @@ router.post("/sign-up", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+    const existingUser = await prisma.user.findFirst({
+      where: { email: { equals: normalizedEmail, mode: "insensitive" } },
     });
 
     if (existingUser) {
@@ -79,8 +79,8 @@ router.post("/sign-in", async (req, res) => {
       return res.status(400).json({ error: "Missing email or password" });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
+    const user = await prisma.user.findFirst({
+      where: { email: { equals: normalizedEmail, mode: "insensitive" } },
     });
 
     if (!user) {
@@ -140,8 +140,8 @@ export async function googleLogin(credential) {
     throw new Error("Unverified Google email is not allowed");
   }
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email: normalizedEmail },
+  const existingUser = await prisma.user.findFirst({
+    where: { email: { equals: normalizedEmail, mode: "insensitive" } },
   });
 
   if (existingUser) {
