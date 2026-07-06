@@ -11,6 +11,7 @@ import "modern-normalize";
 import "./index.css";
 
 import App from "./components/App/App";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import ErrorBoundary from "./ErrorBoundary";
 
 import { persistor, store } from "./redux/store";
@@ -23,7 +24,9 @@ root.render(
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
-            <App />
+            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+              <App />
+            </GoogleOAuthProvider>
             <ToastContainer theme="dark" position="top-right" autoClose={3000} />
           </BrowserRouter>
         </PersistGate>

@@ -2,6 +2,7 @@ import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import {
   registerThunk,
   loginThunk,
+  googleLogin,
   logoutThunk,
   refreshThunk,
   getBalanceThunk,
@@ -51,7 +52,7 @@ const slice = createSlice({
         state.user.balance = payload ?? state.user.balance;
       })
       .addMatcher(
-        isAnyOf(loginThunk.fulfilled, registerThunk.fulfilled),
+        isAnyOf(loginThunk.fulfilled, registerThunk.fulfilled, googleLogin.fulfilled),
         (state, { payload }) => {
           state.user.name = payload.user?.name || null;
           state.user.email = payload.user?.email || null;
@@ -63,14 +64,14 @@ const slice = createSlice({
         }
       )
       .addMatcher(
-        isAnyOf(loginThunk.pending, registerThunk.pending),
+        isAnyOf(loginThunk.pending, registerThunk.pending, googleLogin.pending),
         (state) => {
           state.isAuthLoading = true;
           state.isAuthError = null;
         }
       )
       .addMatcher(
-        isAnyOf(loginThunk.rejected, registerThunk.rejected),
+        isAnyOf(loginThunk.rejected, registerThunk.rejected, googleLogin.rejected),
         (state, { payload }) => {
           state.isAuthLoading = false;
           state.isAuthError = payload;

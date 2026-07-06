@@ -42,6 +42,24 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
+export const googleLogin = createAsyncThunk(
+  "auth/googleLogin",
+  async (credential, thunkAPI) => {
+    try {
+      const { data } = await userTransactionsApi.post("/auth/google-login", {
+        credential,
+      });
+
+      setToken(data.token);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.error || error.response?.data?.message || error.message || String(error)
+      );
+    }
+  }
+);
+
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
   async (_, thunkApi) => {
