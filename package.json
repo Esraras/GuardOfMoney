@@ -8,7 +8,7 @@
     "dev:server": "node --watch server/index.js",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "vite build",
-    "vercel-build": "prisma generate && prisma db push --force-reset=false && vite build",
+    "vercel-build": "prisma generate && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "db:push": "prisma db push",

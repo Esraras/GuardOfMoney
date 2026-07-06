@@ -5,6 +5,11 @@ import {
   removeToken,
 } from "../../config/userTransactionsApi";
 
+const getErrorMessage = (error) => {
+  const serverData = error?.response?.data;
+  return serverData?.error || serverData?.message || error?.message || "Unexpected auth error";
+};
+
 export const registerThunk = createAsyncThunk(
   "auth/register",
   async (credentials, thunkApi) => {
@@ -16,10 +21,7 @@ export const registerThunk = createAsyncThunk(
       setToken(data.token);
       return data;
     } catch (error) {
-      const serverData = error.response?.data;
-      const serverMsg =
-        serverData?.message || (serverData ? JSON.stringify(serverData) : null);
-      return thunkApi.rejectWithValue(serverMsg || error.message);
+      return thunkApi.rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -35,9 +37,7 @@ export const loginThunk = createAsyncThunk(
       setToken(data.token);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || error.message
-      );
+      return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -53,9 +53,7 @@ export const googleLogin = createAsyncThunk(
       setToken(data.token);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.error || error.response?.data?.message || error.message || String(error)
-      );
+      return thunkAPI.rejectWithValue(getErrorMessage(error));
     }
   }
 );
