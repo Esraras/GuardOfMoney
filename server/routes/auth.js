@@ -150,7 +150,6 @@ export async function googleLogin(credential) {
       ? await prisma.user.update({
           where: { id: existingUser.id },
           data: {
-            provider: "GOOGLE",
             providerId: existingUser.providerId || providerId,
             emailVerified: true,
             name: existingUser.name || name || null,
