@@ -32,7 +32,9 @@ const sendAuthResponse = (res, statusCode, user, token) => {
 router.post("/sign-up", async (req, res) => {
   try {
     const { email, password, name } = req.body;
-    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
 
     if (!normalizedEmail || !password) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -73,7 +75,9 @@ router.post("/sign-up", async (req, res) => {
 router.post("/sign-in", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const normalizedEmail = String(email || "").trim().toLowerCase();
+    const normalizedEmail = String(email || "")
+      .trim()
+      .toLowerCase();
 
     if (!normalizedEmail || !password) {
       return res.status(400).json({ error: "Missing email or password" });
@@ -85,12 +89,6 @@ router.post("/sign-in", async (req, res) => {
 
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    if (user.provider === "GOOGLE" && !user.password) {
-      return res.status(401).json({
-        error: "This account uses Google sign-in. Please sign in with Google.",
-      });
     }
 
     const isPasswordValid = user.password
@@ -134,7 +132,9 @@ export async function googleLogin(credential) {
   }
 
   const { email, email_verified, name, picture, sub: providerId } = payload;
-  const normalizedEmail = String(email || "").trim().toLowerCase();
+  const normalizedEmail = String(email || "")
+    .trim()
+    .toLowerCase();
 
   if (!normalizedEmail || !email_verified) {
     throw new Error("Unverified Google email is not allowed");
@@ -143,35 +143,19 @@ export async function googleLogin(credential) {
   const existingUser = await prisma.user.findFirst({
     where: { email: { equals: normalizedEmail, mode: "insensitive" } },
   });
-
-  if (existingUser) {
-    const shouldUpdateProvider = existingUser.provider !== "GOOGLE" || !existingUser.providerId;
-    const user = shouldUpdateProvider
-      ? await prisma.user.update({
-          where: { id: existingUser.id },
-          data: {
-            providerId: existingUser.providerId || providerId,
-            emailVerified: true,
-            name: existingUser.name || name || null,
-            picture: existingUser.picture || picture || null,
-          },
-        })
-      : existingUser;
-
-    const token = generateToken(user.id);
-    return { user, token };
-  }
-
-  const user = await prisma.user.create({
-    data: {
-      email: normalizedEmail,
-      name: name || null,
-      picture: picture || null,
-      provider: "GOOGLE",
-      providerId,
-      emailVerified: true,
-    },
-  });
+  
+  const user =
+    existingUser ||
+    (await prisma.user.create({
+      data: {
+        email: normalizedEmail,
+        name: name || null,
+        picture: picture || null,
+        provider: "GOOGLE",
+        providerId,
+        emailVerified: true,
+      },
+    }));
 
   const token = generateToken(user.id);
   return { user, token };
@@ -194,6 +178,7 @@ router.post("/google-login", async (req, res) => {
     // Sadece istemcinin ihtiyacı olan güvenli alanları dönüyoruz
     return sendAuthResponse(res, 200, user, token);
   } catch (error) {
+    ("");
     console.error("❌ Google login error:", error.message);
 
     // Tanımlı bir hata ise uygun HTTP kodunu dön, yoksa 500 (Internal Server Error) fırlat
