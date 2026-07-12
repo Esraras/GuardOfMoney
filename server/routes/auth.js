@@ -47,7 +47,8 @@ router.post("/sign-up", async (req, res) => {
     if (existingUser) {
       if (existingUser.provider === "GOOGLE") {
         return res.status(409).json({
-          error: "This email is already linked to Google sign-in. Please use Google login.",
+          error:
+            "This email is already linked to Google sign-in. Please use Google login.",
         });
       }
 
@@ -143,7 +144,7 @@ export async function googleLogin(credential) {
   const existingUser = await prisma.user.findFirst({
     where: { email: { equals: normalizedEmail, mode: "insensitive" } },
   });
-  
+
   const user =
     existingUser ||
     (await prisma.user.create({
