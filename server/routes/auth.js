@@ -141,22 +141,18 @@ export async function googleLogin(credential) {
     throw new Error("Unverified Google email is not allowed");
   }
 
-  const existingUser = await prisma.user.findFirst({
-    where: { email: { equals: normalizedEmail, mode: "insensitive" } },
+  const user = await prisma.user.upsert({
+    where: { email: normalizedEmail },
+    update: {}, // Kullanıcı varsa hiçbir şeyi değiştirme (veya istersen güncelle)
+    create: {
+      email: normalizedEmail,
+      name: name || null,
+      picture: picture || null,
+      provider: "GOOGLE",
+      providerId,
+      emailVerified: true,
+    },
   });
-
-  const user =
-    existingUser ||
-    (await prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        name: name || null,
-        picture: picture || null,
-        provider: "GOOGLE",
-        providerId,
-        emailVerified: true,
-      },
-    }));
 
   const token = generateToken(user.id);
   return { user, token };

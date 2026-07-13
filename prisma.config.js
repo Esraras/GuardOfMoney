@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env' });
 
-const databaseUrl = process.env.DIRECT_URL || process.env.DATABASE_URL || process.env.LOCAL_DATABASE_URL;
+const databaseUrl = process.env.LOCAL_DATABASE_URL || process.env.DIRECT_URL || process.env.DATABASE_URL;
 
 export default defineConfig({
   earlyAccess: true,
